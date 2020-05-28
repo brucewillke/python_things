@@ -1,0 +1,3 @@
+argparse
+fstrings
+requests

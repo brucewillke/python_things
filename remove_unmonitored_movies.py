@@ -45,3 +45,5 @@ def remove_unmonitored_movies():
             requests.delete(f"{complete_url}{identifier}", params=payload, headers=headers)
 
 remove_unmonitored_movies()
+
+if __name__ == "__main__":

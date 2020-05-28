@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
-import json
-import requests
-import sys
+"""Remove Unmonitored Movies in Radarr"""
+
 from argparse import ArgumentParser, RawTextHelpFormatter
+import requests
 
 parser = ArgumentParser(
     description='You will need to provide an API Key and Base Url for Radarr',
@@ -24,21 +24,23 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-
 api_key = args.apikey
 headers = {"X-Api-Key": api_key}
 url = args.baseurl
-endpoint = '/api/movie/'
-complete_url = url + endpoint
+ENDPOINT = '/api/movie/'
+complete_url = url + ENDPOINT
 
 response = requests.get(complete_url, headers=headers)
 data = response.json()
 
 def remove_unmonitored_movies():
+
+    """This will iterate through all movies and delete unmonitored by id"""
+
     for val in data:
-        id = val['id']
+        identifier = val['id']
         if val['monitored'] == False:
             payload = {'deleteFiles': False, 'addExclusion': False}
-            requests.delete(complete_url + str(id), params=payload, headers=headers)
+            requests.delete(complete_url + str(identifier), params=payload, headers=headers)
 
 remove_unmonitored_movies()

@@ -2,6 +2,7 @@
 """Remove Unmonitored Movies in Radarr"""
 
 from argparse import ArgumentParser, RawTextHelpFormatter
+import fstrings
 import requests
 
 parser = ArgumentParser(
@@ -28,7 +29,7 @@ api_key = args.apikey
 headers = {"X-Api-Key": api_key}
 url = args.baseurl
 ENDPOINT = '/api/movie/'
-complete_url = url + ENDPOINT
+complete_url = f"{url}{ENDPOINT}"
 
 response = requests.get(complete_url, headers=headers)
 data = response.json()
@@ -39,8 +40,8 @@ def remove_unmonitored_movies():
 
     for val in data:
         identifier = val['id']
-        if val['monitored'] == False:
+        if not val['monitored']:
             payload = {'deleteFiles': False, 'addExclusion': False}
-            requests.delete(complete_url + str(identifier), params=payload, headers=headers)
+            requests.delete(f"{complete_url}{identifier}", params=payload, headers=headers)
 
 remove_unmonitored_movies()
